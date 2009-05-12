@@ -28,8 +28,13 @@ typedef enum
 	bool gateState;
 	
 	int rightmost;
+	
+	int magneticInput;
+	
+	GateView ** inputs;
+	GateView ** outputs;
 
-	NSMutableArray * inputs, * outputs, * inputsTrackingAreas;
+	NSMutableArray * inputsTrackingAreas;
 	
 	int inputCount;
 	
@@ -43,11 +48,13 @@ typedef enum
 - (NSPoint)pointForInput:(int)inputIndex;
 - (NSPoint)pointForOutput;
 
+- (void)mouseExited:(NSEvent *)theEvent;
+
 @property (nonatomic,assign) GateType gateType;
 @property (nonatomic,assign) bool gateState;
 
-@property (nonatomic,assign) NSMutableArray * inputs;
-@property (nonatomic,assign) NSMutableArray * outputs;
+@property (nonatomic,assign) GateView ** inputs;
+@property (nonatomic,assign) GateView ** outputs;
 
 @property (nonatomic,retain) WireView * wires;
 

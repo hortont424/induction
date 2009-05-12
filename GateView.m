@@ -25,11 +25,13 @@
 		mouseDown = NO;
 		draggingWire = NO;
 		
-		inputs = [[NSMutableArray alloc] init];
-		outputs = [[NSMutableArray alloc] init];
 		inputsTrackingAreas = [[NSMutableArray alloc] init];
 		
 		inputCount = 2;
+		magneticInput = -1;
+		
+		inputs = (GateView**)calloc(inputCount, sizeof(GateView*));
+		outputs = (GateView**)calloc(1, sizeof(GateView*));
 		
 		outer = [self bounds];
 		inner = NSInsetRect([self bounds], 10, 10);
@@ -39,7 +41,7 @@
 		for(; currentInput < inputCount; currentInput++)
 		{
 			NSPoint pfo = [self pointForInput:currentInput];
-			NSRect targetRect = NSMakeRect(pfo.x - 12, pfo.y - 2, 14, 4);
+			NSRect targetRect = NSMakeRect(pfo.x - 12, pfo.y - 6, 14, 12);
 			
 			NSTrackingArea * trackingArea = [[NSTrackingArea alloc] initWithRect:targetRect
 																		 options:(NSTrackingMouseEnteredAndExited|NSTrackingActiveAlways|NSTrackingEnabledDuringMouseDrag)
@@ -57,9 +59,13 @@
 	if(![wires activeWire])
 		return;
 	
-	NSLog(@"Entered %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
+	magneticInput = [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue];
 	
-	[wires setMagnetLocation:[self convertPoint:[self pointForInput:[[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]] toView:wires]];
+	[wires setMagnetLocation:[self convertPoint:[self pointForInput:magneticInput] toView:wires]];
+	[wires setMagnetGate:self];
+	[wires setMagnetIndex:magneticInput];
+	
+	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent
@@ -67,9 +73,13 @@
 	if(![wires activeWire])
 		return;
 	
-	NSLog(@"Exited %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
+	magneticInput = -1;
 	
 	[wires setMagnetLocation:NSMakePoint(-1, -1)];
+	[wires setMagnetGate:nil];
+	[wires setMagnetIndex:-1];
+	
+	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -86,7 +96,7 @@
 	clickOrigin = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	
 	NSPoint pfo = [self pointForOutput];
-	CGRect targetRect = CGRectMake(pfo.x - 2, pfo.y - 2, 14, 4);
+	CGRect targetRect = CGRectMake(pfo.x - 2, pfo.y - 6, 14, 12);
 
 	if(CGRectContainsPoint(targetRect, CGPointMake(clickOrigin.x,clickOrigin.y)))
 	{
@@ -106,9 +116,28 @@
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-	mouseDown = draggingWire = NO;
+	mouseDown = NO;
 	
-	[wires removeWire:wireBeingDragged];
+	if(draggingWire)
+	{
+		/*[[[wires activeWire].begin outputs] addObject:self];
+		[[self inputs] addObject:[wires activeWire].begin];
+		
+		[wires addWireFrom:[wires activeWire].begin to:self at:magneticInput];
+		[wires setMagnetLocation:NSMakePoint(-1, -1)];
+		magneticInput = -1;*/
+		
+		//([[wires magnetGate] inputs])[([wires magnetIndex])] = self;
+		//([[wires magnetGate] outputs])[0] = [wires magnetGate];
+		
+		[wires addWireFrom:self to:[wires magnetGate] at:[wires magnetIndex]];
+		
+		[[wires magnetGate] mouseExited:nil];
+		
+		draggingWire = NO;
+		[wires removeWire:wireBeingDragged];
+	}
+	
 	[wires setNeedsDisplay:YES];
 }
 
@@ -181,7 +210,17 @@
 	
 	for(; currentInput < inputCount; currentInput++)
 	{
-		if([inputs count] > currentInput && [inputs objectAtIndex:currentInput])
+		@try
+		{
+			if(inputs[currentInput])
+				continue;
+		}
+		@catch (NSException * e)
+		{
+			
+		}
+		
+		if(currentInput == magneticInput)
 			continue;
 		
 		NSPoint pfi = [self pointForInput:currentInput];
@@ -194,7 +233,7 @@
 
 - (void)drawOutputs
 {
-	if([outputs count] || draggingWire)
+	if(outputs[0] || draggingWire)
 		return;
 	
 	CGContextSetLineWidth(ctx, 2);

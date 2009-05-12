@@ -17,6 +17,8 @@
 	Wire * activeWire;
 	
 	NSPoint magnetLocation;
+	GateView * magnetGate;
+	int magnetIndex;
 }
 
 - (void)addWireFrom:(GateView *)begin to:(GateView *)end at:(int)endIndex;
@@ -26,5 +28,7 @@
 
 @property (nonatomic,retain) Wire * activeWire;
 @property (nonatomic,assign) NSPoint magnetLocation;
+@property (nonatomic,retain) GateView * magnetGate;
+@property (nonatomic,assign) int magnetIndex;
 
 @end

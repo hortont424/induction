@@ -49,11 +49,11 @@
 	c.gateType = GATE_NAND;
 	d.gateType = GATE_INVERTER;
 	
-	[a.outputs addObject:b];
-	[b.inputs addObject:a];
+	/*a.outputs[0] = b;
+	b.inputs[0] = a;
 	
-	[b.inputs addObject:c];
-	[c.outputs addObject:b];
+	b.inputs[1] = c;
+	c.outputs[0] = b;*/
 	
 	a.wires = b.wires = c.wires = d.wires = wires;
 	
@@ -62,8 +62,8 @@
 	[c display];
 	[d display];
 	
-	[wires addWireFrom:a to:b at:0];
-	[wires addWireFrom:c to:b at:1];
+	/*[wires addWireFrom:a to:b at:0];
+	[wires addWireFrom:c to:b at:1];*/
 	
 	[wires display];
 }

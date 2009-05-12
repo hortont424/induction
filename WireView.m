@@ -10,7 +10,7 @@
 
 @implementation WireView
 
-@synthesize activeWire, magnetLocation;
+@synthesize activeWire, magnetLocation, magnetGate, magnetIndex;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -20,6 +20,7 @@
         wires = [[NSMutableArray alloc] init];
 		activeWire = nil;
 		magnetLocation = NSMakePoint(-1,-1);
+		magnetIndex = -1;
     }
     return self;
 }
@@ -82,11 +83,17 @@
 
 - (void)addWireFrom:(GateView *)begin to:(GateView *)end at:(int)endIndex
 {
+	if(!end)
+		return;
+	
 	Wire * newWire = [[Wire alloc] init];
 	
 	newWire.begin = begin;
 	newWire.end = end;
 	newWire.endIndex = endIndex;
+	
+	end.inputs[endIndex] = begin;
+	begin.outputs[0] = end;
 	
 	[wires addObject:newWire];
 }

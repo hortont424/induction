@@ -120,16 +120,6 @@
 	
 	if(draggingWire)
 	{
-		/*[[[wires activeWire].begin outputs] addObject:self];
-		[[self inputs] addObject:[wires activeWire].begin];
-		
-		[wires addWireFrom:[wires activeWire].begin to:self at:magneticInput];
-		[wires setMagnetLocation:NSMakePoint(-1, -1)];
-		magneticInput = -1;*/
-		
-		//([[wires magnetGate] inputs])[([wires magnetIndex])] = self;
-		//([[wires magnetGate] outputs])[0] = [wires magnetGate];
-		
 		[wires addWireFrom:self to:[wires magnetGate] at:[wires magnetIndex]];
 		
 		[[wires magnetGate] mouseExited:nil];

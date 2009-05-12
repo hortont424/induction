@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class Wire;
+@class WireView;
 
 typedef enum
 {
@@ -28,13 +29,13 @@ typedef enum
 	
 	int rightmost;
 
-	NSMutableArray * inputs, * outputs;
+	NSMutableArray * inputs, * outputs, * inputsTrackingAreas;
 	
 	int inputCount;
 	
 	NSRect outer, inner;
 	
-	id wires;
+	WireView * wires;
 	
 	CGContextRef ctx;
 }
@@ -48,6 +49,6 @@ typedef enum
 @property (nonatomic,assign) NSMutableArray * inputs;
 @property (nonatomic,assign) NSMutableArray * outputs;
 
-@property (nonatomic,retain) id wires;
+@property (nonatomic,retain) WireView * wires;
 
 @end

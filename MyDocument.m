@@ -68,6 +68,8 @@
 {
     [super windowControllerDidLoadNib:aController];
 	myWindow = [aController window];
+	[myWindow setAcceptsMouseMovedEvents:YES];
+	
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
 }
 

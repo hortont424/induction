@@ -8,6 +8,8 @@
 
 #import "GateView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Wire.h"
+#import "WireView.h"
 
 @implementation GateView
 
@@ -25,13 +27,39 @@
 		
 		inputs = [[NSMutableArray alloc] init];
 		outputs = [[NSMutableArray alloc] init];
+		inputsTrackingAreas = [[NSMutableArray alloc] init];
 		
 		inputCount = 2;
 		
 		outer = [self bounds];
 		inner = NSInsetRect([self bounds], 10, 10);
+		
+		int currentInput = 0;
+		
+		for(; currentInput < inputCount; currentInput++)
+		{
+			NSPoint pfo = [self pointForInput:currentInput];
+			NSRect targetRect = NSMakeRect(pfo.x - 12, pfo.y - 2, 14, 4);
+			
+			NSTrackingArea * trackingArea = [[NSTrackingArea alloc] initWithRect:targetRect
+																		 options:(NSTrackingMouseEnteredAndExited|NSTrackingActiveAlways|NSTrackingEnabledDuringMouseDrag)
+																		   owner:self
+																		userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:currentInput],@"inputIndex",nil]];
+			[self addTrackingArea:trackingArea];
+			[inputsTrackingAreas addObject:trackingArea];
+		}
     }
     return self;
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent
+{
+	NSLog(@"Entered %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
+}
+
+- (void)mouseExited:(NSEvent *)theEvent
+{
+	NSLog(@"Exited %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
 }
 
 - (void)mouseDown:(NSEvent *)theEvent

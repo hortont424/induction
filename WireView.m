@@ -10,12 +10,15 @@
 
 @implementation WireView
 
+@synthesize activeWire;
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
 	{
         wires = [[NSMutableArray alloc] init];
+		activeWire = nil;
     }
     return self;
 }
@@ -58,11 +61,13 @@
 - (void)addWire:(Wire *)w
 {
 	[wires addObject:w];
+	activeWire = w;
 }
 
 - (void)removeWire:(Wire *)w
 {
 	[wires removeObject:w];
+	activeWire = nil;
 }
 
 - (void)addWireFrom:(GateView *)begin to:(GateView *)end at:(int)endIndex

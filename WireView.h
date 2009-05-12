@@ -14,8 +14,14 @@
 @interface WireView : NSView
 {
 	NSMutableArray * wires;
+	Wire * activeWire;
 }
 
 - (void)addWireFrom:(GateView *)begin to:(GateView *)end at:(int)endIndex;
+
+- (void)addWire:(Wire *)w;
+- (void)removeWire:(Wire *)w;
+
+@property (nonatomic,retain) Wire * activeWire;
 
 @end

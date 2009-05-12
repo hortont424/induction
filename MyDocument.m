@@ -37,14 +37,17 @@
 	GateView * a = [[GateView alloc] initWithFrame:NSMakeRect(50, 50, 64, 64)];
 	GateView * b = [[GateView alloc] initWithFrame:NSMakeRect(200, 70, 64, 64)];
 	GateView * c = [[GateView alloc] initWithFrame:NSMakeRect(200, 200, 64, 64)];
+	GateView * d = [[GateView alloc] initWithFrame:NSMakeRect(320, 70, 64, 64)];
 	
 	[[myWindow contentView] addSubview:a];
 	[[myWindow contentView] addSubview:b];
 	[[myWindow contentView] addSubview:c];
+	[[myWindow contentView] addSubview:d];
 	
 	a.gateType = GATE_NAND;
 	b.gateType = GATE_INVERTER;
 	c.gateType = GATE_NAND;
+	d.gateType = GATE_INVERTER;
 	
 	[a.outputs addObject:b];
 	[b.inputs addObject:a];
@@ -52,11 +55,12 @@
 	[b.inputs addObject:c];
 	[c.outputs addObject:b];
 	
-	a.wires = b.wires = c.wires = wires;
+	a.wires = b.wires = c.wires = d.wires = wires;
 	
 	[a display];
 	[b display];
 	[c display];
+	[d display];
 	
 	[wires addWireFrom:a to:b at:0];
 	[wires addWireFrom:c to:b at:1];

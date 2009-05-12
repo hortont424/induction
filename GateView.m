@@ -54,12 +54,22 @@
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
+	if(![wires activeWire])
+		return;
+	
 	NSLog(@"Entered %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
+	
+	[wires setMagnetLocation:[self convertPoint:[self pointForInput:[[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]] toView:wires]];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
+	if(![wires activeWire])
+		return;
+	
 	NSLog(@"Exited %d", [[[[theEvent trackingArea] userInfo] objectForKey:@"inputIndex"] intValue]);
+	
+	[wires setMagnetLocation:NSMakePoint(-1, -1)];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent

@@ -10,7 +10,7 @@
 
 @implementation WireView
 
-@synthesize activeWire;
+@synthesize activeWire, magnetLocation;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -19,6 +19,7 @@
 	{
         wires = [[NSMutableArray alloc] init];
 		activeWire = nil;
+		magnetLocation = NSMakePoint(-1,-1);
     }
     return self;
 }
@@ -42,9 +43,18 @@
 		NSPoint endPt;
 		
 		if(w.end)
+		{
 			endPt = [w.end convertPoint:[w.end pointForInput:w.endIndex] toView:self];
+		}
 		else
+		{
 			endPt = [w.begin convertPoint:w.endPoint toView:self];
+			
+			if(magnetLocation.x != -1)
+			{
+				endPt = magnetLocation;
+			}
+		}
 		
 		CGContextMoveToPoint(ctx, beginPt.x, beginPt.y);
 		/*CGContextAddCurveToPoint(ctx, (beginPt.x + endPt.x) / 2.0, (((float)beginPt.y + endPt.y) / 2.0) - (10 * ((endPt.y - beginPt.y > 0) ? 1 : -1)),

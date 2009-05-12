@@ -15,6 +15,8 @@
 {
 	NSMutableArray * wires;
 	Wire * activeWire;
+	
+	NSPoint magnetLocation;
 }
 
 - (void)addWireFrom:(GateView *)begin to:(GateView *)end at:(int)endIndex;
@@ -23,5 +25,6 @@
 - (void)removeWire:(Wire *)w;
 
 @property (nonatomic,retain) Wire * activeWire;
+@property (nonatomic,assign) NSPoint magnetLocation;
 
 @end

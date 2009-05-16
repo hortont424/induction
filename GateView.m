@@ -96,7 +96,7 @@
 	clickOrigin = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	
 	NSPoint pfo = [self pointForOutput];
-	CGRect targetRect = CGRectMake(pfo.x - 2, pfo.y - 6, 14, 12);
+	CGRect targetRect = CGRectMake(pfo.x - 2, pfo.y - 6, 16, 12);
 
 	if(CGRectContainsPoint(targetRect, CGPointMake(clickOrigin.x,clickOrigin.y)))
 	{
